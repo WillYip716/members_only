@@ -10,8 +10,5 @@ var MemberSchema = new Schema(
     }
 );
 
-MemberSchema.virtual('name').get(function(){
-    return this.screenname;
-});
 
 module.exports = mongoose.model('Member', MemberSchema);

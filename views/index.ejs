@@ -6,6 +6,17 @@
   </head>
   <body>
     <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <% if (!locals.messages) {%>
+      <p>NO Messages FOUND</p>
+    <% } else { %>
+      <% for (var i = 0; i < messages.length; i++) { %>
+          <div class='messagebox'>
+            <p><%= messages[i].title %></p>
+            <p><%= messages[i].message %></p>
+            <p><%= messages[i].dateadded%></p>
+            <p><%= messages[i].author.screenname%></p>
+          </div>
+      <% } %>
+    <% } %>
   </body>
 </html>
