@@ -6,7 +6,12 @@
   </head>
   <body>
     <h1><%= title %></h1>
-    <% if (!locals.messages) {%>
+    <% if (locals.user) {%>
+      <h1>WELCOME BACK <%= user.screenname %></h1>
+      <a href="/create-message">Post a new message</a>
+      <a href="/log-out">LOG OUT</a>
+    <% } %>
+    <% if (!locals.messages||messages.length==0) {%>
       <p>NO Messages FOUND</p>
     <% } else { %>
       <% for (var i = 0; i < messages.length; i++) { %>
@@ -14,9 +19,12 @@
             <p><%= messages[i].title %></p>
             <p><%= messages[i].message %></p>
             <p><%= messages[i].dateadded%></p>
-            <p><%= messages[i].author.screenname%></p>
+            <p>Author: <%= messages[i].author.screenname%></p>
           </div>
       <% } %>
     <% } %>
+    <a href="/sign-up">sign up</a>
+    <a href="/log-in">log in</a>
+
   </body>
 </html>

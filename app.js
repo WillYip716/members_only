@@ -8,6 +8,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
 require('dotenv').config();
+var Member = require('./models/member');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -59,7 +60,7 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
+  Member.findById(id, function(err, user) {
     done(err, user);
   });
 });
