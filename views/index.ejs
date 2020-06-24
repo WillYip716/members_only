@@ -5,26 +5,30 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
+    <%- include headerinfo.ejs -%>
     <h1><%= title %></h1>
     <% if (locals.user) {%>
       <h1>WELCOME BACK <%= user.screenname %></h1>
       <a href="/create-message">Post a new message</a>
-      <a href="/log-out">LOG OUT</a>
     <% } %>
     <% if (!locals.messages||messages.length==0) {%>
       <p>NO Messages FOUND</p>
     <% } else { %>
       <% for (var i = 0; i < messages.length; i++) { %>
           <div class='messagebox'>
-            <p><%= messages[i].title %></p>
+            <p><b><%= messages[i].title %></b></p>
             <p><%= messages[i].message %></p>
             <p><%= messages[i].dateadded%></p>
-            <p>Author: <%= messages[i].author.screenname%></p>
+            <% if (locals.user&&(user.membership=='plus'||user.membership=='admin')) {%>
+              <p>Author: <%= messages[i].author.screenname%></p>
+            <% } else { %>
+              <p>Author: Anonymous</p>
+            <% } %>
+            <% if (locals.user&&user.membership=='admin') {%>
+              <a href='<%=messages[i].url%>''>Delete Post</a>
+            <% }%>
           </div>
       <% } %>
     <% } %>
-    <a href="/sign-up">sign up</a>
-    <a href="/log-in">log in</a>
-
   </body>
 </html>

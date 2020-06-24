@@ -1,0 +1,16 @@
+<div class='topbar'>
+    <% if (locals.user) {%>
+        <p>User: <%= user.screenname%></p> 
+        <p>Membership: <%= user.membership%></p>
+        <% if (user.membership=="standard") {%>
+            <a href="/upgrade">Upgrade membership</a>
+            <a href="/admin">Upgrade to admin</a>
+        <% } else if(user.membership=="plus"){%>
+            <a href="/admin">Upgrade to admin</a>
+        <% } %>
+        <a href="/log-out">LOG OUT</a>
+    <% } else {%>
+        <a href="/sign-up">sign up</a>
+        <a href="/log-in">log in</a>
+    <% } %>
+</div>
