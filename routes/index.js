@@ -9,9 +9,10 @@ var bcrypt = require('bcryptjs');
 const passport = require("passport");
 var moment = require('moment');
 
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  Message.find({}).sort([['dateadded',1]]).populate('author').exec(function (err, result) {
+  Message.find({}).sort([['dateadded',-1]]).populate('author').exec(function (err, result) {
     if (err) { return next(err); }
     //Successful, so render
     res.render('index', { title: 'Members Only Messageboard', messages: result, user:req.user});
@@ -102,6 +103,51 @@ router.post('/upgrade', function(req,res,next){
        // Successful - redirect to new store.
        res.redirect("/");
   });
+});
+
+router.get('/message/:id', function(req,res,next){
+  Message.findById(req.params.id).populate('author').exec(function(err,result){
+    if(err){return next(err);}
+    res.render('message',{message:result});
+  });
+});
+  
+
+router.post('/message/:id', function(req,res,next){
+  Message.findByIdAndRemove(req.params.id, function deleteMessage(err) {
+      if (err) { return next(err); }
+      // Success - go to genres list
+      res.redirect('/')
+  });
+});
+
+router.get('/admin', function(req, res, next) {
+  res.render('admin', {});
+});
+
+router.post('/admin', [
+  check("password", "Please input correct password").exists().isLength({min:2}).trim().escape(),
+],function(req,res,next){
+  if(req.body.password == process.env.ADMINPASS ){
+    const member = new Member({
+      loginname: req.user.loginname,
+      screenname: req.user.screenname,
+      password: req.user.password,
+      membership: 'admin',
+      _id:req.user._id
+    });
+    Member.findByIdAndUpdate(req.user._id,member, {},function (err) {
+      if (err) { return next(err); }
+         // Successful - redirect to new store.
+         //req.flash("success", "Congrats you're an admin");
+         res.redirect("/");
+    });
+  }
+  else{
+    //req.flash("error", "Incorrect Password");
+    res.redirect("/");
+  }
+  
 });
 
 
