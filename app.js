@@ -9,7 +9,8 @@ const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
 require('dotenv').config();
 var Member = require('./models/member');
-const flash = require("connect-flash");
+var compression = require('compression');
+var helmet = require('helmet');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -24,6 +25,8 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
 var app = express();
+app.use(compression());
+app.use(helmet());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -76,7 +79,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use(flash());
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

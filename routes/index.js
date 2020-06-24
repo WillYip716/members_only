@@ -21,7 +21,12 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/sign-up', function(req, res, next) {
-  res.render('signup', {});
+  if(req.user){
+    res.redirect('/');
+  }
+  else{
+    res.render('signup', {});
+  }
 });
 
 router.post("/sign-up", 
@@ -51,7 +56,12 @@ router.post("/sign-up",
 });
 
 router.get('/log-in', function(req, res, next) {
-  res.render('log-in', {});
+  if(req.user){
+    res.redirect('/');
+  }
+  else{
+    res.render('log-in', {});
+  }
 });
 
 router.post(
@@ -64,7 +74,12 @@ router.post(
 
 
 router.get('/create-message', function(req, res, next) {
-  res.render('create-message', {});
+  if(!req.user){
+    res.redirect('/');
+  }
+  else{
+    res.render('create-message', {user:req.user});
+  }
 });
 
 router.post("/create-message", 
@@ -87,7 +102,13 @@ router.post("/create-message",
 });
 
 router.get('/upgrade', function(req, res, next) {
-  res.render('upgrade', {});
+  
+  if(!req.user||req.user.membership=="plus"||req.user.membership=="admin"){
+    res.redirect('/');
+  }
+  else{
+    res.render('upgrade', {user:req.user});
+  }
 });
 
 router.post('/upgrade', function(req,res,next){
@@ -106,10 +127,16 @@ router.post('/upgrade', function(req,res,next){
 });
 
 router.get('/message/:id', function(req,res,next){
-  Message.findById(req.params.id).populate('author').exec(function(err,result){
-    if(err){return next(err);}
-    res.render('message',{message:result});
-  });
+  if(!req.user){
+    res.redirect('/');
+  }
+  else{
+    Message.findById(req.params.id).populate('author').exec(function(err,result){
+      if(err){return next(err);}
+      res.render('message',{message:result,user:req.user});
+    });
+  }
+  
 });
   
 
@@ -122,7 +149,13 @@ router.post('/message/:id', function(req,res,next){
 });
 
 router.get('/admin', function(req, res, next) {
-  res.render('admin', {});
+  
+  if(!req.user||req.user.membership=="admin"){
+    res.redirect('/');
+  }
+  else{
+    res.render('admin', {user:req.user});
+  }
 });
 
 router.post('/admin', [
