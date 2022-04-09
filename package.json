@@ -23,7 +23,7 @@
     "helmet": "^3.23.2",
     "http-errors": "~1.6.3",
     "install": "^0.13.0",
-    "moment": "^2.27.0",
+    "moment": "^2.29.2",
     "mongoose": "^5.9.19",
     "morgan": "~1.9.1",
     "passport": "^0.4.1",
